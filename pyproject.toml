@@ -1,0 +1,231 @@
+[project]
+name = "edu-monitoring-proxy"
+version = "0.1.0"
+description = "Прокси-сервис для рассылки уведомлений от Grafana"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosmtplib>=5.0.0",
+    "celery[redis]>=5.6.2",
+    "dishka>=1.7.2",
+    "dotenv>=0.9.9",
+    "granian[reload]>=2.6.1",
+    "litestar[jinja, prometheus]>=2.19.0",
+    "pydantic-settings>=2.12.0",
+    "pyreqwest>=0.10.1",
+    "structlog>=25.5.0",
+    "toml>=0.10.2",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.12.0",
+    "pytest>=9.0.2",
+    "ruff>=0.14.13",
+]
+
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(app/infrastructure/worker|app/infrastructure/utils)/
+'''
+
+[tool.flakehell]
+max_line_length = 100
+format = "colored"
+show_source = true
+exclude = [ "tests/fixtures/__init__.py", "*/migrations/*", "*/storages/*", "app/infrastructure/worker/*",
+    "app/infrastructure/utils/*"]
+
+[tool.flakehell.plugins]
+pyflakes = ["+*"]
+pycodestyle = [ "+*", "-W503", "-E203",]
+flake8-black = ["+*"]
+wemake-python-styleguide = ["-*"]
+
+[tool.flakehell.exceptions."migrations/"]
+pyflakes = ["-*"]
+wemake-python-styleguide = ["-*"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+known_third_party = [ "celery", "alembic", "sqlalchemy", "httpx", "pytest", "posix_ipc", "sqlalchemy_utils", "starlette", "pydantic", "fastapi",]
+force_sort_within_sections = true
+
+#[tool.commitizen]
+#name = "cz_conventional_commits"
+#version = "4.6.4"
+#bump_message = "release $current_version → $new_version"
+#update_changelog_on_bump = true
+#version_files = [
+#    "pyproject.toml:version"
+#]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--tb=short --strict --capture=no -p no:logging --verbose -vv"
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::UserWarning",
+#   "ignore::sqlalchemy.exc.SAWarning",
+  "ignore::pytest.PytestAssertRewriteWarning"
+]
+asyncio_mode = "auto"
+
+[tool.flake8]
+max-line-length = 120
+count = true
+
+[tool.pycln]
+all = true
+
+[tool.mypy]
+
+exclude = [
+    "tests/.*",
+    "migrations/.*",
+    "app/infrastructure/worker/*",
+    "app/infrastructure/utils/*"
+]
+allow_redefinition = false
+check_untyped_defs = true
+disallow_untyped_decorators = true
+disallow_any_explicit = false
+disallow_any_generics = false
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+ignore_errors = false
+ignore_missing_imports = false
+local_partial_types = true
+strict_optional = true
+strict_equality = true
+no_implicit_optional = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
+warn_no_return = true
+
+disable_error_code = [
+    "attr-defined",
+    "call-arg",
+    "func-returns-value",
+    "misc",
+    "no-untyped-def",
+    "operator",
+    "return-value",
+    "arg-type",
+    "union-attr",
+    "var-annotated",
+    "has-type",
+    "no-redef",
+    "no-untyped-call",
+    "return",
+    "var-annotated",
+    "valid-type",
+    "return-value",
+    "attr-defined",
+    "override",
+    "index",
+    "list-item",
+    "import-untyped",
+    "name-defined",
+    "unreachable",
+    "assigment",
+    "comparsion-overlap",
+    "call-overload",
+]
+
+
+enable_error_code = ["assigment"]
+
+
+plugins = ["pydantic.mypy"]
+
+
+[[tool.mypy.overrides]]
+module = [
+    "sqlalchemy_utils.*",
+    "alembic.*",
+    "choicesenum.*",
+    "factory.*",
+    "pytest_async_sqlalchemy.*",
+    "sqlalchemy.testing",
+    "deepdiff.*",
+    "tablib.*",
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+cache-dir = "~/.cache/ruff"
+line-length = 120
+show-fixes = true
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "DTZ", "T20", "SIM", "PT", "PL", "PLE", "PLR", "PLW", "D", "ANN"]
+ignore = [
+    "D100",
+    "D104",
+    "D106",
+    "D107",
+    "N805",
+    "B904",
+    "N818",  # Exception name `AttributeNotImplemented` should be named with an Error suffix
+    "UP007",  # Use `X | Y` for type annotations
+    "PLR0915",
+    "PLR2004",
+    "PLR0912",  # Too many branches
+    "PT001",
+    "PT023",
+    "B008",
+    "PLR0913",
+    "D415",   #First line shoud end ...
+    "D205",
+    "ANN101",  # Игнорируем проверку аннотации для `self`
+    "ANN102",  # Игнорируем проверку аннотации для `cls`
+    "ANN204",  # Игнорируем проверку возвращаемого типа для `__init__`
+    "SIM102",
+    "DTZ007",
+    "SIM105"
+]
+
+fixable = ["F", "I", "D", "E", "W", "PT", "UP", "C", "B"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"*/versions/*.py" = ["D103", "W291"]
+"*/models/*.py" = ["F821", "D101"]
+"*/migrations/*.py" = ["D103", "D205", "ANN001", "ANN201", "ANN202", "E501"]
+"*/storages/*.py" = ["D103", "D205", "ANN001", "ANN201", "ANN202", "E501", "ANN401", "ANN002", "ANN003"]
+"*test_*.py" = ["PLR0913"]
+"conftest.py" = ["ANN001", "ANN202", "ANN201", "PT004", "E501", "F821"]
+"*/fixtures/*.py" = ["ANN001", "ANN003", "ANN202", "ANN201", "PT004", "E501"]
+"*/worker/*.py" = ["ANN001", "ANN003", "ANN202", "ANN201", "PT004", "E501", "PLW0603", "PLC0415"]
+"*/exception_handler.py" = ["ANN401", "C408"]
+"*/utils/*.py" = ["T201"]
+"*fixtures*.py" = [
+    "PLR0913",
+    "E501", # Line too long
+    "SIM117" # nested "with" statements
+]
+
+
+[tool.ruff.lint.isort]
+force-wrap-aliases = true
+combine-as-imports = true
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+
+[tool.ruff.lint.pylint]
+max-returns = 12
+max-args = 6

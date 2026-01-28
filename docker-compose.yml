@@ -1,0 +1,36 @@
+services:
+  alert-proxy-app:
+    container_name: alert-proxy-app
+    env_file:
+      - .env.example
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    command: python -m app.run
+    depends_on:
+      - alert-proxy-redis
+
+  alert-proxy-celery:
+    container_name: alert-proxy-celery
+    env_file:
+      - .env.example
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    command: python -m app.celery_run
+    depends_on:
+      - alert-proxy-redis
+
+  alert-proxy-redis:
+    container_name: alert-proxy-redis
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT}:6379"
+
+volumes:
+  redis_data:
+  venv-data:

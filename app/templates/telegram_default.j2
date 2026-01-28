@@ -1,0 +1,16 @@
+{{ title }}
+{% if contexts|length == 0 %}
+(no matching log record found in Loki for current search window)
+{% else %}
+{% for ctx in contexts %}
+#{{ loop.index }} @ {{ ctx.ts_iso }}
+{{ ctx.line }}
+
+BEFORE:
+{% for l in ctx.before %}{{ l }}
+{% endfor %}
+AFTER:
+{% for l in ctx.after %}{{ l }}
+{% endfor %}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,26 @@
+services:
+  alert-proxy-app:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ./:/app
+    networks:
+      - observability
+
+  alert-proxy-celery:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ./:/app
+    networks:
+      - observability
+
+  alert-proxy-redis:
+    networks:
+      - observability
+
+networks:
+  observability:
+    external: true

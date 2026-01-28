@@ -1,0 +1,25 @@
+.env.example
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Grafana & Loki data volumes (optional, if you bind-mount in the future)
+data/
+
+node_modules
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.pytest_cache
+.venv
+venv
+bool
+celery
+__pycache__
+package-lock.json

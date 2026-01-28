@@ -1,0 +1,39 @@
+{{ title }}
+Status: {{ status }}
+Alert name: {{ alertname }}
+
+Labels:
+{% for k,v in labels.items() -%}
+- {{ k }} = {{ v }}
+{% endfor %}
+
+Annotations:
+{% for k,v in annotations.items() -%}
+- {{ k }} = {{ v }}
+{% endfor %}
+
+Matches found (max {{ max_matches }}):
+{% if contexts|length == 0 %}
+- No matching log record found in Loki for the current search window.
+{% else %}
+{% for ctx in contexts %}
+--- Match #{{ loop.index }} @ {{ ctx.ts_iso }} ---
+{{ ctx.line }}
+
+-- BEFORE ({{ ctx.before|length }}) --
+{% for l in ctx.before %}{{ l }}
+{% endfor %}
+
+-- AFTER ({{ ctx.after|length }}) --
+{% for l in ctx.after %}{{ l }}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+
+Debug:
+- selector: {{ selector }}
+- error_filter: {{ error_filter }}
+- search_window: {{ search_window }}
+- context_before: {{ context_before }}
+- context_after: {{ context_after }}

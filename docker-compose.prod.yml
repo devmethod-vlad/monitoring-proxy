@@ -1,0 +1,22 @@
+services:
+  alert-proxy-app:
+    build:
+      context: .
+      target: prod
+    networks:
+      - default
+      - service-network
+
+  alert-proxy-celery:
+    build:
+      context: .
+      target: prod
+    networks:
+      - default
+      - service-network
+
+networks:
+  default:
+    driver: bridge
+  service-network:
+    external: true
