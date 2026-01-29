@@ -33,6 +33,7 @@ class JinjaTemplateRenderer(ITemplateRenderer):
         context_after = payload.get("context_after")
         max_matches = payload.get("max_matches")
         contexts = payload.get("contexts")
+        query_match = payload.get("query_match")
 
         body = template.render(
             title=title,
@@ -47,5 +48,6 @@ class JinjaTemplateRenderer(ITemplateRenderer):
             context_after=context_after,
             max_matches=max_matches,
             contexts=contexts,
+            query_match=query_match,
         ).strip()
         return Notification(title=title, body=body)

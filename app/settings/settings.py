@@ -9,9 +9,9 @@ load_dotenv()
 
 
 class EnvBaseSettings(BaseSettings):
-    """Базовый класс для прокидывания настроек из .env.example"""
+    """Базовый класс для прокидывания настроек из .env"""
 
-    model_config = SettingsConfigDict(env_file="..env.example", extra="ignore")
+    model_config = SettingsConfigDict(env_file="..env", extra="ignore")
 
 
 class AppSettings(EnvBaseSettings):
@@ -94,8 +94,7 @@ class AlertExtractSettings(EnvBaseSettings):
     context_time_range: str = "30m"
     search_window: str = "5m"
     max_matches: int = 3
-    default_stream_selector: str = '{job="testapp"}'
-    default_error_filter: str = '"ERROR"'
+    default_query_match: str = '{job="testapp"} |= "ERROR"'
 
     model_config = SettingsConfigDict(env_prefix="alert_")
 

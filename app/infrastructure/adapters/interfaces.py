@@ -38,3 +38,7 @@ class ILokiAdapter(ABC):
         direction: Direction,
     ) -> list[LokiEntry]:
         """Метод извлечения"""
+
+    @abstractmethod
+    async def validate_query(self, *, query: str) -> str:
+        """Валидирует LogQL через Loki. Если query невалиден — Loki вернёт 4xx."""

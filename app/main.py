@@ -14,7 +14,7 @@ from litestar.template import TemplateConfig
 from app.api import v1_router
 from app.infrastructure.exception_handler import exception_handler
 from app.infrastructure.ioc import ApplicationProvider
-from app.infrastructure.providers import RedisProvider
+from app.infrastructure.providers import HttpProvider, RedisProvider
 from app.settings.settings import (
     RedisSettings,
     Settings,
@@ -39,6 +39,7 @@ def get_app() -> Litestar:
     container = make_async_container(
         ApplicationProvider(),
         RedisProvider(),
+        HttpProvider(),
         context={RedisSettings: config.redis, Settings: config},
     )
 

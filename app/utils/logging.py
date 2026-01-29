@@ -1,14 +1,14 @@
-import sys
 from pathlib import Path
 
 import structlog
 from litestar.logging.config import LoggingConfig, StructLoggingConfig
 from litestar.plugins.structlog import StructlogConfig
+
 from app.settings.settings import settings
+
 
 def get_structlog_config() -> StructlogConfig:
     """Конфигурация структлога с выводом в консоль и файл"""
-
     # Создаем директорию для логов
     log_dir = Path(settings.logging.app_dir)
     log_dir.mkdir(exist_ok=True, parents=True)
@@ -73,7 +73,7 @@ def get_structlog_config() -> StructlogConfig:
                     "level": "INFO",
                     "propagate": False,
                 },
-                "uvicorn": {
+                "granian": {
                     "handlers": ["console", "file"],
                     "level": "INFO",
                     "propagate": False,

@@ -2,7 +2,7 @@ services:
   alert-proxy-app:
     container_name: alert-proxy-app
     env_file:
-      - .env.example
+      - .env
     environment:
       - PYTHONPATH=/app
       - PYTHONUNBUFFERED=1
@@ -15,7 +15,7 @@ services:
   alert-proxy-celery:
     container_name: alert-proxy-celery
     env_file:
-      - .env.example
+      - .env
     environment:
       - PYTHONPATH=/app
       - PYTHONUNBUFFERED=1

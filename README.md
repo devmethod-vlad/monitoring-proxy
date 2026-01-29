@@ -15,6 +15,8 @@ docker network create observability
 
 ```
 
+### При создании алерта в графане всегда необходимо указывать custom annotation 'query_match' и внутри - запрос LogQL, к примеру {job="testapp"} |= "ERROR"
+
 ## В корне проекта создать .env файл, туда скопировать
 
 
@@ -48,8 +50,7 @@ ALERT_CONTEXT_AFTER=2
 ALERT_CONTEXT_TIME_RANGE=30m
 ALERT_SEARCH_WINDOW=5m
 ALERT_MAX_MATCHES=3
-ALERT_DEFAULT_STREAM_SELECTOR={job="testapp"}
-ALERT_DEFAULT_ERROR_FILTER='"ERROR"'
+ALERT_DEFAULT_QUERY_MATCH='{job="testapp"} |= "ERROR"'
 LOKI_BASE_URL=http://loki-proxy:3100
 LOKI_TIMEOUT_S=15
 

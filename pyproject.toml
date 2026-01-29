@@ -209,6 +209,8 @@ fixable = ["F", "I", "D", "E", "W", "PT", "UP", "C", "B"]
 "*/worker/*.py" = ["ANN001", "ANN003", "ANN202", "ANN201", "PT004", "E501", "PLW0603", "PLC0415"]
 "*/exception_handler.py" = ["ANN401", "C408"]
 "*/utils/*.py" = ["T201"]
+"*/utils/celery_logging.py" = ["ANN003"]
+"*/schemes/*" = ["ANN401", "ANN001", "N815", "ANN206"]
 "*fixtures*.py" = [
     "PLR0913",
     "E501", # Line too long

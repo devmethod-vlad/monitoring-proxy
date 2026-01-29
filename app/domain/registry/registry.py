@@ -71,7 +71,7 @@ class NotificationRegistry(INotificationRegistry):
                 success = await sender.send(notification)
                 results[channel] = success
             except Exception as e:
-                logger.error("Ошибка канала", channel=channel, error=str(e))
+                logger.error(f"Ошибка канала, channel= {channel}, error={str(e)}")
                 results[channel] = False
                 errors.append(f"{channel}: {str(e)}")
         logger.info(f"Результаты отправки по каналам: {results}, ошибки: {errors}")
